@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Momentum">
+<title>Momentum</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Epilogue:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Epilogue:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+
+:root {
+  --sand: #F5F0E8;
+  --sand2: #EDE8DF;
+  --sand3: #E0D9CC;
+  --white: #FDFCFA;
+  --ink: #1C1917;
+  --ink2: #3D3830;
+  --muted: #8C8478;
+  --dim: #B8B0A4;
+  --orange: #E85D26;
+  --orange-light: rgba(232,93,38,0.1);
+  --orange-mid: rgba(232,93,38,0.25);
+  --green: #2A7A55;
+  --green-light: rgba(42,122,85,0.1);
+  --border: rgba(28,25,23,0.08);
+  --border-mid: rgba(28,25,23,0.14);
+  --shadow: 0 2px 20px rgba(28,25,23,0.07);
+  --shadow-md: 0 8px 40px rgba(28,25,23,0.1);
+  --r: 16px;
+  --r-sm: 10px;
+  --r-xs: 6px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'Epilogue', sans-serif;
+  background: var(--sand);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+
+/* TOPBAR */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px 14px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  color: var(--ink);
+}
+.logo em {
+  color: var(--orange);
+  font-style: normal;
+}
+.pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 1.5px solid var(--border-mid);
+  background: transparent;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .2s;
+  letter-spacing: .01em;
+}
+.pill-btn:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
+.pill-btn .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); }
+
+/* SCROLL */
+.scroll-area { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; background: var(--sand); }
+.scroll-area::-webkit-scrollbar { display: none; }
+.page { padding: 0 0 120px; }
+
+/* HERO QUOTE */
+.hero-quote {
+  background: var(--white);
+  margin: 20px 18px 0;
+  border-radius: var(--r);
+  padding: 28px 26px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.hero-quote::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--orange), #F5A623);
+}
+.hero-eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hero-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--orange-mid); }
+.quote-main {
+  font-family: 'Syne', sans-serif;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--ink);
+  letter-spacing: -.01em;
+}
+.quote-deco {
+  font-family: 'Syne', sans-serif;
+  font-size: 80px;
+  font-weight: 800;
+  color: var(--orange);
+  opacity: .08;
+  position: absolute;
+  bottom: -20px;
+  right: 16px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* GREETING STRIP */
+.greeting-strip {
+  padding: 22px 22px 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.greeting-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  color: var(--ink);
+  line-height: 1;
+}
+.greeting-name span { color: var(--orange); }
+.greeting-sub { font-size: 13px; color: var(--muted); margin-top: 5px; font-weight: 300; }
+.streak-badge {
+  background: var(--orange-light);
+  border: 1.5px solid var(--orange-mid);
+  border-radius: 100px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--orange);
+  letter-spacing: .02em;
+  white-space: nowrap;
+  margin-bottom: 4px;
+}
+
+/* DAY SCROLLER */
+.day-scroller-wrap { padding: 18px 22px 0; }
+.day-scroller-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 10px;
+}
+.day-scroller { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.day-scroller::-webkit-scrollbar { display: none; }
+.day-chip {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 1.5px solid var(--border-mid);
+  background: var(--white);
+  font-family: 'Epilogue', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+  box-shadow: var(--shadow);
+}
+.day-chip.active {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(232,93,38,0.3);
+}
+
+/* CURRENT DAY CARD */
+.day-card {
+  margin: 14px 18px 0;
+  background: var(--white);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.day-card-header {
+  padding: 20px 22px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.day-card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.day-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+.progress-track { flex: 1; margin-right: 14px; }
+.progress-nums {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+.prog-bar { height: 4px; background: var(--sand2); border-radius: 100px; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--orange); border-radius: 100px; transition: width .4s cubic-bezier(.4,0,.2,1); }
+.prog-pct {
+  font-family: 'Syne', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--orange);
+  letter-spacing: -.03em;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* TASKS */
+.task-list { padding: 4px 0; }
+.task-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+  transition: background .15s;
+  cursor: pointer;
+}
+.task-row:last-child { border-bottom: none; }
+.task-row:hover { background: var(--sand); }
+.task-row.done { background: var(--green-light); }
+.task-check {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--border-mid);
+  background: transparent;
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+}
+.task-row.done .task-check { background: var(--green); border-color: var(--green); }
+.task-check svg { display: none; }
+.task-row.done .task-check svg { display: block; }
+.task-info { flex: 1; }
+.task-title { font-size: 14px; font-weight: 500; color: var(--ink); line-height: 1.4; }
+.task-row.done .task-title { text-decoration: line-through; color: var(--dim); }
+.task-note { font-size: 12px; color: var(--muted); margin-top: 3px; font-weight: 300; }
+.photo-strip { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.photo-thumb { width: 52px; height: 52px; border-radius: var(--r-xs); object-fit: cover; border: 1px solid var(--border); }
+.photo-add-btn {
+  width: 52px; height: 52px;
+  border-radius: var(--r-xs);
+  border: 1.5px dashed var(--border-mid);
+  background: transparent;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 2px;
+  color: var(--dim);
+  cursor: pointer;
+  font-size: 16px;
+  transition: all .15s;
+}
+.photo-add-btn:hover { border-color: var(--orange); color: var(--orange); }
+.photo-add-btn small { font-size: 8px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+input[type=file] { display: none; }
+
+/* ADD TASK */
+.add-task-trigger {
+  margin: 10px 18px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-radius: var(--r-sm);
+  border: 1.5px dashed var(--border-mid);
+  background: transparent;
+  cursor: pointer;
+  transition: all .15s;
+  width: calc(100% - 36px);
+}
+.add-task-trigger:hover { border-color: var(--orange); background: var(--orange-light); }
+.add-task-trigger span { font-size: 13px; color: var(--muted); font-weight: 400; }
+.add-icon {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--sand2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  color: var(--muted);
+  flex-shrink: 0;
+  transition: all .15s;
+}
+.add-task-trigger:hover .add-icon { background: var(--orange); color: #fff; }
+
+/* FORM */
+.form-sheet {
+  margin: 12px 18px 0;
+  background: var(--white);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  padding: 20px;
+  box-shadow: var(--shadow-md);
+}
+.form-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 12px;
+  display: block;
+}
+.f-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border-mid);
+  border-radius: var(--r-sm);
+  background: var(--sand);
+  font-family: 'Epilogue', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+  margin-bottom: 10px;
+  transition: border-color .15s;
+}
+.f-input:focus { border-color: var(--orange); background: var(--white); }
+.f-input::placeholder { color: var(--dim); }
+.form-actions { display: flex; gap: 8px; margin-top: 4px; }
+.btn-save {
+  padding: 11px 22px;
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  border-radius: 100px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(232,93,38,0.3);
+  transition: all .2s;
+  letter-spacing: .01em;
+}
+.btn-save:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(232,93,38,0.4); }
+.btn-ghost {
+  padding: 11px 18px;
+  background: transparent;
+  color: var(--muted);
+  border: 1.5px solid var(--border-mid);
+  border-radius: 100px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+}
+.btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+
+/* MESSAGES */
+.msg-section { margin: 20px 18px 0; }
+.section-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--border-mid); }
+.msg-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.msg-bub {
+  padding: 11px 15px;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  max-width: 82%;
+  font-weight: 400;
+}
+.msg-coach {
+  background: var(--orange);
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+  font-weight: 500;
+}
+.msg-system {
+  background: var(--white);
+  color: var(--muted);
+  align-self: flex-start;
+  border: 1px solid var(--border-mid);
+  border-bottom-left-radius: 4px;
+  font-style: italic;
+}
+
+/* COACH SECTION */
+.coach-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 20px 18px 0; }
+.stat-tile {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 16px 12px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.stat-big {
+  font-family: 'Syne', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--orange);
+  letter-spacing: -.03em;
+  line-height: 1;
+}
+.stat-small { font-size: 10px; color: var(--dim); margin-top: 5px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
+
+.ov-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 18px 0; }
+.ov-tile {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 14px;
+  cursor: pointer;
+  transition: all .2s;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.ov-tile::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: var(--orange);
+  transition: width .3s;
+}
+.ov-tile:hover::after { width: 100%; }
+.ov-tile.has-progress::after { width: var(--prog); background: var(--orange); }
+.ov-tile.all-done::after { width: 100%; background: var(--green); }
+.ov-tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.ov-date { font-size: 10px; color: var(--dim); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
+.ov-title { font-size: 12px; font-weight: 600; color: var(--ink); line-height: 1.35; margin-bottom: 10px; }
+.ov-count { font-size: 11px; color: var(--muted); }
+
+.msg-compose { margin: 16px 18px 0; display: flex; gap: 8px; align-items: center; }
+.msg-compose input {
+  flex: 1;
+  padding: 12px 18px;
+  border: 1.5px solid var(--border-mid);
+  border-radius: 100px;
+  background: var(--white);
+  font-family: 'Epilogue', sans-serif;
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color .15s;
+  box-shadow: var(--shadow);
+}
+.msg-compose input:focus { border-color: var(--orange); }
+.msg-compose input::placeholder { color: var(--dim); }
+.send-btn {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--orange);
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(232,93,38,0.3);
+  transition: all .2s;
+}
+.send-btn:hover { transform: scale(1.08); }
+
+.add-day-trigger {
+  margin: 12px 18px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px;
+  border-radius: var(--r-sm);
+  border: 1.5px dashed var(--border-mid);
+  background: transparent;
+  cursor: pointer;
+  width: calc(100% - 36px);
+  font-family: 'Epilogue', sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+  transition: all .15s;
+}
+.add-day-trigger:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
+
+/* PIN SCREEN */
+.pin-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  padding: 40px 30px;
+  text-align: center;
+}
+.pin-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 8px;
+}
+.pin-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.pin-sub { font-size: 13px; color: var(--muted); margin-bottom: 36px; font-weight: 300; }
+.pin-dots { display: flex; gap: 14px; margin-bottom: 36px; }
+.pin-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--border-mid);
+  background: transparent;
+  transition: all .2s;
+}
+.pin-dot.filled { background: var(--orange); border-color: var(--orange); transform: scale(1.1); }
+.pin-dot.err { background: #E84040; border-color: #E84040; }
+.pin-grid { display: grid; grid-template-columns: repeat(3,72px); gap: 10px; justify-content: center; margin-bottom: 14px; }
+.pin-k {
+  width: 72px; height: 62px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+  box-shadow: var(--shadow);
+}
+.pin-k:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
+.pin-k:active { transform: scale(0.96); }
+.pin-k.del { font-size: 16px; color: var(--muted); }
+.pin-err { font-size: 12px; color: #E84040; font-weight: 500; height: 18px; }
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">Mo<em>men</em>tum</div>
+  <div id="topbar-right">
+    <button class="pill-btn" onclick="openCoach()">
+      <span class="dot"></span> Coach
+    </button>
+  </div>
+</div>
+
+<div class="scroll-area">
+  <div class="page" id="view-arthur"></div>
+  <div class="page hidden" id="view-pin">
+    <div class="pin-page">
+      <div class="pin-logo">Momentum</div>
+      <div class="pin-title">Coach toegang</div>
+      <div class="pin-sub">Alleen voor Dwayne</div>
+      <div class="pin-dots">
+        <div class="pin-dot" id="pd0"></div>
+        <div class="pin-dot" id="pd1"></div>
+        <div class="pin-dot" id="pd2"></div>
+        <div class="pin-dot" id="pd3"></div>
+      </div>
+      <div class="pin-grid">
+        <button class="pin-k" onclick="pp('1')">1</button>
+        <button class="pin-k" onclick="pp('2')">2</button>
+        <button class="pin-k" onclick="pp('3')">3</button>
+        <button class="pin-k" onclick="pp('4')">4</button>
+        <button class="pin-k" onclick="pp('5')">5</button>
+        <button class="pin-k" onclick="pp('6')">6</button>
+        <button class="pin-k" onclick="pp('7')">7</button>
+        <button class="pin-k" onclick="pp('8')">8</button>
+        <button class="pin-k" onclick="pp('9')">9</button>
+        <button class="pin-k" style="opacity:0;pointer-events:none"></button>
+        <button class="pin-k" onclick="pp('0')">0</button>
+        <button class="pin-k del" onclick="pd()">⌫</button>
+      </div>
+      <div class="pin-err" id="pin-err"></div>
+    </div>
+  </div>
+  <div class="page hidden" id="view-dwayne"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const cfg = {
+  apiKey: "AIzaSyBpRIE2lUeenkMV2EF0z6fh2AaV1TFw8WA",
+  authDomain: "arthur-334f6.firebaseapp.com",
+  projectId: "arthur-334f6",
+  storageBucket: "arthur-334f6.firebasestorage.app",
+  messagingSenderId: "814012246386",
+  appId: "1:814012246386:web:11943c6942328cabbc15eb"
+};
+const db = getFirestore(initializeApp(cfg));
+const REF = doc(db, "planning", "arthur");
+
+// ── PINCODE — verander hier naar jouw eigen 4 cijfers ──
+const PIN = "1234";
+let pinBuf = "", pinOk = false;
+
+const QUOTES = [
+  "Het leven heeft je gereset. Niet uitgeschakeld.",
+  "Je hoeft vandaag niet heel de berg te beklimmen. Eén stap. Dat is genoeg.",
+  "Alles wat nu zwaar voelt, wordt later het bewijs dat je het aankunt.",
+const Q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+
+const DAYS0 = [
+  { id:"d1", date:"Ma 17 mrt", title:"Garage: basis voorbereiden", tasks:[
+    {id:"t1",title:"Afvoer en waterleiding inspecteren",note:"Controleer op lekkage, zet markering",done:false,photos:[]},
+    {id:"t2",title:"Vloer opmeten en materiaallijst maken",note:"Noteer afmetingen in cm",done:false,photos:[]},
+    {id:"t3",title:"Gereedschap klaarleggen",note:"Zie eerder gemaakte lijst",done:false,photos:[]}
+  ]},
+  { id:"d2", date:"Wo 19 mrt", title:"Garage: wanden en isolatie", tasks:[
+    {id:"t1",title:"Isolatiemateriaal ophalen",note:"Bouwmarkt, lijst meenemen",done:false,photos:[]},
+    {id:"t2",title:"Eerste wand isoleren",note:"Begin met de buitenmuur",done:false,photos:[]},
+    {id:"t3",title:"Tweede wand isoleren",note:"",done:false,photos:[]}
+  ]},
+  { id:"d3", date:"Za 22 mrt", title:"Garage: elektra voorbereiden", tasks:[
+    {id:"t1",title:"Elektricien bellen voor offerte",note:"Nodig voor keuken en badkamer",done:false,photos:[]},
+    {id:"t2",title:"Leidingen tracé uittekenen",note:"",done:false,photos:[]}
+  ]},
+  { id:"d4", date:"Ma 24 mrt", title:"Garage: gietvloer storten", tasks:[
+    {id:"t1",title:"Ondergrond egaliseren",note:"",done:false,photos:[]},
+    {id:"t2",title:"Gietvloer bestellen of storten",note:"Min. 24u droogtijd inplannen",done:false,photos:[]}
+  ]}
+];
+
+let S = {
+  dayIdx: 0, showTaskForm: false, showDayForm: false,
+  days: JSON.parse(JSON.stringify(DAYS0)),
+  msgs: [{type:'system', text:'Dwayne stuurt hier berichten voor jou, Arthur!'}]
+};
+
+async function boot() {
+  const snap = await getDoc(REF);
+  if (!snap.exists()) await setDoc(REF, { days: S.days, msgs: S.msgs });
+  onSnapshot(REF, s => {
+    if (!s.exists()) return;
+    const d = s.data();
+    S.days = d.days || S.days;
+    S.msgs = d.msgs || S.msgs;
+    if (!$('view-arthur').classList.contains('hidden')) rA();
+    if (!$('view-dwayne').classList.contains('hidden')) rD();
+  });
+  rA(); show('view-arthur');
+}
+
+const $ = id => document.getElementById(id);
+const save = () => setDoc(REF, { days: S.days, msgs: S.msgs }).catch(()=>{});
+
+function show(v) {
+  ['view-arthur','view-pin','view-dwayne'].forEach(id => $(id).classList.toggle('hidden', id!==v));
+  $('topbar-right').innerHTML = v==='view-arthur'
+    ? `<button class="pill-btn" onclick="openCoach()"><span class="dot"></span> Coach</button>`
+    : `<button class="pill-btn" onclick="goBack()">← Terug</button>`;
+}
+
+window.goBack = () => { pinBuf=""; pinOk=false; rA(); show('view-arthur'); };
+window.openCoach = () => pinOk ? (rD(), show('view-dwayne')) : (pinBuf="", updDots(), show('view-pin'));
+
+window.pp = d => {
+  if (!d || pinBuf.length>=4) return;
+  pinBuf += d; updDots();
+  if (pinBuf.length===4) setTimeout(checkPin,150);
+};
+window.pd = () => { pinBuf=pinBuf.slice(0,-1); updDots(); $('pin-err').textContent=''; };
+function updDots(err) {
+  for(let i=0;i<4;i++){
+    const dot=$('pd'+i);
+    dot.classList.toggle('filled',i<pinBuf.length&&!err);
+    dot.classList.toggle('err',!!err);
+  }
+}
+function checkPin() {
+  if (pinBuf===PIN) { pinOk=true; rD(); show('view-dwayne'); }
+  else {
+    updDots(true);
+    $('pin-err').textContent='Verkeerde pincode, probeer opnieuw';
+    setTimeout(()=>{ pinBuf=""; updDots(false); $('pin-err').textContent=''; },1200);
+  }
+}
+
+function rA() {
+  const day = S.days[S.dayIdx]; if(!day) return;
+  const done = day.tasks.filter(t=>t.done).length;
+  const tot = day.tasks.length;
+  const pct = tot ? Math.round(done/tot*100) : 0;
+  const doneDays = S.days.filter(d=>d.tasks.length&&d.tasks.every(t=>t.done)).length;
+
+  const chips = S.days.map((d,i)=>`
+    <button class="day-chip${i===S.dayIdx?' active':''}" onclick="selDay(${i})">${d.date}</button>
+  `).join('');
+
+  const tasks = day.tasks.map((t,ti)=>`
+    <div class="task-row${t.done?' done':''}" onclick="toggleTask(${ti})">
+      <div class="task-check">
+        <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="task-info">
+        <div class="task-title">${t.title}</div>
+        ${t.note?`<div class="task-note">${t.note}</div>`:''}
+        ${t.photos.length||true?`<div class="photo-strip" onclick="event.stopPropagation()">
+          ${t.photos.map(p=>`<img class="photo-thumb" src="${p}">`).join('')}
+          <label class="photo-add-btn"><span>+</span><small>foto</small><input type="file" accept="image/*" onchange="addPh(${ti},this)"></label>
+        </div>`:''}
+      </div>
+    </div>`).join('');
+
+  const msgsHtml = S.msgs.map(m=>`<div class="msg-bub msg-${m.type}">${m.text}</div>`).join('');
+
+  $('view-arthur').innerHTML = `
+    <div class="greeting-strip">
+      <div>
+        <div class="greeting-name">Hey, <span>Arthur.</span></div>
+        <div class="greeting-sub">Kleine stappen. Grote impact.</div>
+      </div>
+      ${doneDays>0?`<div class="streak-badge">${doneDays} dag${doneDays>1?'en':''} klaar</div>`:''}
+    </div>
+    <div class="hero-quote">
+      <div class="hero-eyebrow">Quote van vandaag</div>
+      <div class="quote-main">${Q.text}</div>${Q.author ? `<div class="quote-author" style="font-size:11px;color:var(--muted);margin-top:10px;padding-left:8px;font-style:normal;font-weight:500;letter-spacing:.04em">— ${Q.author}</div>` : ""}
+      <div class="quote-deco">"</div>
+    </div>
+    <div class="day-scroller-wrap">
+      <div class="day-scroller-label">Jouw planning</div>
+      <div class="day-scroller">${chips}</div>
+    </div>
+    <div class="day-card">
+      <div class="day-card-header">
+        <div class="day-card-title">${day.title}</div>
+        <div class="day-card-meta">
+          <div class="progress-track">
+            <div class="progress-nums"><span>${done} van ${tot} taken</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div>
+          </div>
+          <div class="prog-pct">${pct}%</div>
+        </div>
+      </div>
+      <div class="task-list">${tasks}</div>
+    </div>
+    ${S.showTaskForm?`
+    <div class="form-sheet">
+      <span class="form-label">Taak toevoegen</span>
+      <input class="f-input" id="nt-title" placeholder="Wat moet er gedaan worden?" />
+      <input class="f-input" id="nt-note" placeholder="Toelichting (optioneel)" />
+      <div class="form-actions">
+        <button class="btn-save" onclick="saveTask()">Toevoegen</button>
+        <button class="btn-ghost" onclick="cancelTask()">Annuleren</button>
+      </div>
+    </div>`:`
+    <button class="add-task-trigger" onclick="showTaskForm()">
+      <div class="add-icon">+</div>
+      <span>Taak toevoegen aan deze dag</span>
+    </button>`}
+    <div class="msg-section">
+      <div class="section-eyebrow">Berichten van Dwayne</div>
+      <div class="msg-list">${msgsHtml}</div>
+    </div>
+  `;
+}
+
+function rD() {
+  const tot = S.days.reduce((a,d)=>a+d.tasks.length,0);
+  const done = S.days.reduce((a,d)=>a+d.tasks.filter(t=>t.done).length,0);
+  const pct = tot ? Math.round(done/tot*100) : 0;
+
+  const ov = S.days.map((d,i)=>{
+    const dn = d.tasks.filter(t=>t.done).length;
+    const tt = d.tasks.length;
+    const p = tt ? Math.round(dn/tt*100) : 0;
+    const cls = dn===tt&&tt>0?'all-done':dn>0?'has-progress':'';
+    return `<div class="ov-tile ${cls}" style="--prog:${p}%" onclick="jmpDay(${i})">
+      <div class="ov-date">${d.date}</div>
+      <div class="ov-title">${d.title}</div>
+      <div class="ov-count">${dn}/${tt} taken klaar</div>
+    </div>`;
+  }).join('');
+
+  const msgsHtml = S.msgs.map(m=>`<div class="msg-bub msg-${m.type}">${m.text}</div>`).join('');
+
+  $('view-dwayne').innerHTML = `
+    <div class="greeting-strip">
+      <div>
+        <div class="greeting-name">Coach <span>Dwayne.</span></div>
+        <div class="greeting-sub">Arthur's voortgang in één oogopslag.</div>
+      </div>
+    </div>
+    <div class="coach-stats">
+      <div class="stat-tile"><div class="stat-big">${done}</div><div class="stat-small">Klaar</div></div>
+      <div class="stat-tile"><div class="stat-big">${tot}</div><div class="stat-small">Totaal</div></div>
+      <div class="stat-tile"><div class="stat-big">${pct}%</div><div class="stat-small">Voortgang</div></div>
+    </div>
+    <div style="padding:18px 18px 0"><div class="section-eyebrow">Dagplanning Arthur</div></div>
+    <div class="ov-grid">${ov}</div>
+    ${S.showDayForm?`
+    <div class="form-sheet" style="margin:12px 18px 0">
+      <span class="form-label">Nieuwe dag toevoegen</span>
+      <input class="f-input" id="nd-title" placeholder="Onderwerp (bv. Badkamer: tegels)" />
+      <input class="f-input" id="nd-date" placeholder="Datum (bv. Ma 31 mrt)" />
+      <input class="f-input" id="nd-t1" placeholder="Taak 1" />
+      <input class="f-input" id="nd-t2" placeholder="Taak 2 (optioneel)" />
+      <input class="f-input" id="nd-t3" placeholder="Taak 3 (optioneel)" />
+      <div class="form-actions">
+        <button class="btn-save" onclick="saveDay()">Toevoegen</button>
+        <button class="btn-ghost" onclick="cancelDay()">Annuleren</button>
+      </div>
+    </div>`:`<button class="add-day-trigger" onclick="showDayForm()">+ Dag toevoegen aan Arthur's planning</button>`}
+    <div class="msg-section">
+      <div class="section-eyebrow">Stuur een bericht aan Arthur</div>
+      <div class="msg-list">${msgsHtml}</div>
+    </div>
+    <div class="msg-compose">
+      <input id="coach-in" placeholder="Schrijf een motivatiebericht..." onkeydown="if(event.key==='Enter')sendMsg()" />
+      <button class="send-btn" onclick="sendMsg()">&#10148;</button>
+    </div>
+  `;
+}
+
+window.selDay = i => { S.dayIdx=i; rA(); };
+window.jmpDay = i => { S.dayIdx=i; rA(); show('view-arthur'); };
+window.toggleTask = ti => { S.days[S.dayIdx].tasks[ti].done=!S.days[S.dayIdx].tasks[ti].done; save(); };
+window.addPh = (ti,input) => {
+  const f=input.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=e=>{ S.days[S.dayIdx].tasks[ti].photos.push(e.target.result); save(); };
+  r.readAsDataURL(f);
+};
+window.showTaskForm = () => { S.showTaskForm=true; rA(); };
+window.cancelTask = () => { S.showTaskForm=false; rA(); };
+window.saveTask = () => {
+  const title=$('nt-title').value.trim(); if(!title) return;
+  const note=$('nt-note').value.trim();
+  S.days[S.dayIdx].tasks.push({id:'t'+Date.now(),title,note,done:false,photos:[]});
+  S.showTaskForm=false; save();
+};
+window.showDayForm = () => { S.showDayForm=true; rD(); };
+window.cancelDay = () => { S.showDayForm=false; rD(); };
+window.saveDay = () => {
+  const title=$('nd-title').value.trim(); if(!title) return;
+  const date=$('nd-date').value.trim();
+  const tasks=[];
+  ['nd-t1','nd-t2','nd-t3'].forEach(id=>{ const v=$(id).value.trim(); if(v) tasks.push({id:'t'+Date.now()+Math.random(),title:v,note:'',done:false,photos:[]}); });
+  if(!tasks.length) tasks.push({id:'t'+Date.now(),title:'Werkzaamheden invullen',note:'',done:false,photos:[]});
+  S.days.push({id:'d'+Date.now(),date:date||'Datum volgt',title,tasks});
+  S.showDayForm=false; save();
+};
+window.sendMsg = () => {
+  const inp=$('coach-in'); const txt=inp.value.trim(); if(!txt) return;
+  S.msgs.push({type:'coach',text:txt}); inp.value=''; save();
+};
+
+boot();
+</script>
+</body>
+</html>
