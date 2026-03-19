@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Momentum">
+<title>Momentum</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #2D6A4F;
+  --green-light: #40916C;
+  --green-pale: #D8F3DC;
+  --green-mid: #B7E4C7;
+  --cream: #FAFAF7;
+  --warm: #F5F0E8;
+  --text: #1A1A18;
+  --text-muted: #6B6B60;
+  --text-light: #9B9B8E;
+  --border: rgba(45,106,79,0.15);
+  --border-strong: rgba(45,106,79,0.3);
+  --card: #FFFFFF;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+
+/* TOP BAR */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 12px;
+  background: var(--cream);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.topbar-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--green);
+  letter-spacing: -0.3px;
+}
+.role-toggle {
+  display: flex;
+  background: var(--warm);
+  border-radius: 20px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  gap: 2px;
+}
+.role-btn {
+  padding: 5px 14px;
+  border-radius: 16px;
+  border: none;
+  background: transparent;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all .2s;
+}
+.role-btn.active {
+  background: var(--green);
+  color: #fff;
+  font-weight: 500;
+}
+
+/* SCROLL AREA */
+.scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 20px 100px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* QUOTE CARD */
+.quote-card {
+  background: var(--green);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.quote-card::before {
+  content: '\201C';
+  position: absolute;
+  top: -10px;
+  left: 14px;
+  font-family: 'DM Serif Display', serif;
+  font-size: 80px;
+  color: rgba(255,255,255,0.12);
+  line-height: 1;
+}
+.quote-text {
+  font-family: 'DM Serif Display', serif;
+  font-size: 16px;
+  line-height: 1.55;
+  color: #fff;
+  font-style: italic;
+  position: relative;
+  z-index: 1;
+}
+.quote-day {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  margin-top: 10px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* GREETING */
+.greeting {
+  margin-bottom: 20px;
+}
+.greeting-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px;
+  color: var(--text);
+  line-height: 1.2;
+}
+.greeting-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* DAY HEADER */
+.day-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.day-title-block .day-main { font-size: 16px; font-weight: 600; color: var(--text); }
+.day-title-block .day-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.nav-arrows { display: flex; gap: 8px; }
+.nav-arrow {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--green);
+  font-size: 14px;
+  transition: all .15s;
+}
+.nav-arrow:hover { background: var(--green-pale); }
+.nav-arrow:disabled { opacity: 0.3; cursor: default; }
+
+/* PROGRESS */
+.progress-wrap { margin-bottom: 18px; }
+.progress-top { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
+.progress-bar { height: 5px; background: var(--green-pale); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--green); border-radius: 3px; transition: width .4s ease; }
+
+/* TASKS */
+.task-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.task-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 14px 12px;
+  transition: border-color .2s, background .2s;
+}
+.task-card.done { background: var(--green-pale); border-color: var(--green-mid); }
+.task-top { display: flex; align-items: flex-start; gap: 12px; }
+.check-wrap {
+  width: 22px; height: 22px; flex-shrink: 0; margin-top: 1px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border-strong);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent;
+  transition: all .2s;
+}
+.check-wrap.checked { background: var(--green); border-color: var(--green); }
+.check-wrap svg { display: none; }
+.check-wrap.checked svg { display: block; }
+.task-body { flex: 1; }
+.task-name { font-size: 14px; font-weight: 500; line-height: 1.4; color: var(--text); }
+.task-card.done .task-name { text-decoration: line-through; color: var(--text-muted); }
+.task-hint { font-size: 12px; color: var(--text-light); margin-top: 3px; }
+.photo-section { margin-top: 10px; }
+.photo-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.photo-thumb { width: 56px; height: 56px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); }
+.photo-add {
+  width: 56px; height: 56px; border-radius: 8px;
+  border: 1.5px dashed var(--border-strong);
+  background: transparent; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px;
+  color: var(--text-light); font-size: 18px; line-height: 1;
+}
+.photo-add span { font-size: 10px; font-weight: 500; }
+input[type=file] { display: none; }
+
+/* BUTTONS */
+.btn-add-task {
+  width: 100%; padding: 13px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: transparent; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; color: var(--text-muted);
+  margin-bottom: 20px;
+  transition: background .15s;
+}
+.btn-add-task:hover { background: var(--warm); }
+
+/* FORMS */
+.form-card {
+  background: var(--warm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.form-label { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: .05em; text-transform: uppercase; margin-bottom: 10px; }
+.form-input {
+  width: 100%; padding: 10px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--card);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; color: var(--text);
+  margin-bottom: 8px;
+  outline: none;
+}
+.form-input:focus { border-color: var(--green); }
+.form-row { display: flex; gap: 8px; margin-top: 4px; }
+.btn-primary {
+  padding: 9px 18px;
+  background: var(--green); color: #fff;
+  border: none; border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: background .15s;
+}
+.btn-primary:hover { background: var(--green-light); }
+.btn-secondary {
+  padding: 9px 14px;
+  background: transparent; color: var(--text-muted);
+  border: 1px solid var(--border-strong); border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; cursor: pointer;
+}
+
+/* MESSAGES */
+.messages-section { margin-bottom: 20px; }
+.section-title { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: .05em; text-transform: uppercase; margin-bottom: 10px; }
+.msg-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.msg-bubble {
+  padding: 9px 13px;
+  border-radius: 12px;
+  font-size: 13px; line-height: 1.5;
+  max-width: 85%;
+}
+.msg-coach { background: var(--green); color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; }
+.msg-system { background: var(--warm); color: var(--text-muted); align-self: flex-start; border-bottom-left-radius: 3px; border: 1px solid var(--border); }
+.msg-input-row { display: flex; gap: 8px; }
+.msg-input {
+  flex: 1; padding: 10px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  background: var(--card);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; color: var(--text);
+  outline: none;
+}
+.msg-input:focus { border-color: var(--green); }
+.btn-send {
+  padding: 10px 16px;
+  background: var(--green); color: #fff;
+  border: none; border-radius: 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+}
+
+/* COACH STATS */
+.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 10px;
+  text-align: center;
+}
+.stat-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--green); line-height: 1; }
+.stat-lbl { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+
+/* OVERVIEW GRID */
+.overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.ov-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.ov-card:hover { border-color: var(--green-light); background: var(--green-pale); }
+.ov-card.active-day { border-color: var(--green); border-width: 1.5px; }
+.ov-date { font-size: 10px; color: var(--text-light); margin-bottom: 3px; font-weight: 500; text-transform: uppercase; letter-spacing: .03em; }
+.ov-title { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 8px; line-height: 1.3; }
+.ov-bar { height: 3px; background: var(--green-pale); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
+.ov-fill { height: 100%; background: var(--green); border-radius: 2px; }
+.ov-count { font-size: 10px; color: var(--text-muted); }
+
+/* TAG */
+.tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+.tag-today { background: var(--green-pale); color: var(--green); }
+.tag-other { background: var(--warm); color: var(--text-muted); border: 1px solid var(--border); }
+
+/* DAY TABS */
+.day-tabs { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 16px; padding-bottom: 4px; scrollbar-width: none; }
+.day-tabs::-webkit-scrollbar { display: none; }
+.day-tab {
+  flex-shrink: 0; padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px; color: var(--text-muted);
+  cursor: pointer; white-space: nowrap;
+  transition: all .15s;
+}
+.day-tab.active { background: var(--green); color: #fff; border-color: var(--green); font-weight: 500; }
+
+/* ADD DAY BTN */
+.btn-add-day {
+  width: 100%; padding: 13px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: transparent; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+/* LOADING */
+.loading { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 14px; }
+.dot-pulse { display: inline-flex; gap: 5px; margin-top: 12px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); opacity: 0.3; animation: pulse 1.2s ease-in-out infinite; }
+.dot:nth-child(2) { animation-delay: .2s; }
+.dot:nth-child(3) { animation-delay: .4s; }
+@keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+/* HIDDEN */
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">Momentum</div>
+  <div class="role-toggle">
+    <button class="role-btn active" onclick="setRole('arthur')" id="btn-arthur">Arthur</button>
+    <button class="role-btn" onclick="setRole('dwayne')" id="btn-dwayne">Dwayne</button>
+  </div>
+</div>
+
+<div class="scroll-area" id="main-scroll">
+  <div id="view-arthur">
+    <div class="loading">
+      Even laden...
+      <div class="dot-pulse"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    </div>
+  </div>
+  <div id="view-dwayne" class="hidden">
+    <div class="loading">
+      Even laden...
+      <div class="dot-pulse"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBpRIE2lUeenkMV2EF0z6fh2AaV1TFw8WA",
+  authDomain: "arthur-334f6.firebaseapp.com",
+  projectId: "arthur-334f6",
+  storageBucket: "arthur-334f6.firebasestorage.app",
+  messagingSenderId: "814012246386",
+  appId: "1:814012246386:web:11943c6942328cabbc15eb"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const DOCREF = doc(db, "planning", "arthur");
+
+const QUOTES = [
+  "Jij bouwt niet alleen een huis — je bouwt een nieuw leven. Steen voor steen, dag voor dag.",
+  "De moed om opnieuw te beginnen is de krachtigste eigenschap die een mens kan hebben.",
+  "Elke dag dat je opstaat en doorgaat, bewijs je aan jezelf wie je echt bent.",
+  "Groei begint precies op het punt waar comfort eindigt. Jij bent al voorbij dat punt.",
+  "Je bent niet gebroken. Je bent aan het worden wie je altijd al had kunnen zijn.",
+  "Het zwaarste moment is niet de val — het is de keuze om toch op te staan. Jij staat op.",
+  "Wat je nu bouwt, wordt ooit de plek waar jij in vrede zit. Dat is de moeite waard.",
+  "Kracht is niet het afwezig zijn van pijn. Kracht is verder gaan terwijl je pijn voelt.",
+  "Een nieuw hoofdstuk begint niet als alles klaar is. Het begint op het moment dat jij besluit te starten.",
+  "Je hebt al bewezen dat je het kan. Vandaag bewijs je het opnieuw.",
+  "De mooiste versie van jezelf wordt gevormd in de moeilijkste momenten.",
+  "Jij verdient een thuis waar rust en trots samenkomen. Je bent er bijna."
+];
+
+const DEFAULT_DAYS = [
+  {
+    id: "dag1", label: "Dag 1", date: "Ma 17 mrt", title: "Garage: basis voorbereiden",
+    tasks: [
+      {id:"t1", title:"Afvoer en waterleiding inspecteren", note:"Controleer op lekkage, zet markering", done:false, photos:[]},
+      {id:"t2", title:"Vloer opmeten en materiaallijst maken", note:"Noteer afmetingen in cm", done:false, photos:[]},
+      {id:"t3", title:"Gereedschap klaarleggen", note:"Zie eerder gemaakte lijst", done:false, photos:[]}
+    ]
+  },
+  {
+    id: "dag2", label: "Dag 2", date: "Wo 19 mrt", title: "Garage: wanden en isolatie",
+    tasks: [
+      {id:"t1", title:"Isolatiemateriaal ophalen", note:"Bouwmarkt, lijst meenemen", done:false, photos:[]},
+      {id:"t2", title:"Eerste wand isoleren", note:"Begin met de buitenmuur", done:false, photos:[]},
+      {id:"t3", title:"Tweede wand isoleren", note:"", done:false, photos:[]}
+    ]
+  },
+  {
+    id: "dag3", label: "Dag 3", date: "Za 22 mrt", title: "Garage: elektra voorbereiden",
+    tasks: [
+      {id:"t1", title:"Elektricien bellen voor offerte", note:"Nodig voor keuken en badkamer", done:false, photos:[]},
+      {id:"t2", title:"Leidingen tracé uittekenen", note:"", done:false, photos:[]}
+    ]
+  },
+  {
+    id: "dag4", label: "Dag 4", date: "Ma 24 mrt", title: "Garage: gietvloer storten",
+    tasks: [
+      {id:"t1", title:"Ondergrond egaliseren", note:"", done:false, photos:[]},
+      {id:"t2", title:"Gietvloer bestellen of storten", note:"Min. 24u droogtijd inplannen", done:false, photos:[]}
+    ]
+  }
+];
+
+let state = {
+  role: 'arthur',
+  currentDayIndex: 0,
+  showAddTask: false,
+  showAddDay: false,
+  days: JSON.parse(JSON.stringify(DEFAULT_DAYS)),
+  messages: [{type:'system', text:'Dwayne stuurt hier zijn berichten voor jou, Arthur!'}]
+};
+
+async function initData() {
+  const snap = await getDoc(DOCREF);
+  if (!snap.exists()) {
+    await setDoc(DOCREF, { days: state.days, messages: state.messages });
+  }
+}
+
+function listenToFirestore() {
+  onSnapshot(DOCREF, (snap) => {
+    if (snap.exists()) {
+      const data = snap.data();
+      state.days = data.days || state.days;
+      state.messages = data.messages || state.messages;
+      if (state.role === 'arthur') renderArthur();
+      else renderDwayne();
+    }
+  });
+}
+
+async function saveToFirestore() {
+  try {
+    await setDoc(DOCREF, { days: state.days, messages: state.messages });
+  } catch(e) { console.error(e); }
+}
+
+function getQuote() {
+  const d = new Date();
+  return QUOTES[(d.getDate() + d.getMonth() * 3) % QUOTES.length];
+}
+
+function setRole(r) {
+  state.role = r;
+  document.getElementById('btn-arthur').classList.toggle('active', r === 'arthur');
+  document.getElementById('btn-dwayne').classList.toggle('active', r === 'dwayne');
+  document.getElementById('view-arthur').classList.toggle('hidden', r !== 'arthur');
+  document.getElementById('view-dwayne').classList.toggle('hidden', r !== 'dwayne');
+  document.getElementById('main-scroll').scrollTop = 0;
+  if (r === 'arthur') renderArthur();
+  else renderDwayne();
+}
+window.setRole = setRole;
+
+function renderArthur() {
+  const day = state.days[state.currentDayIndex];
+  if (!day) return;
+  const done = day.tasks.filter(t => t.done).length;
+  const total = day.tasks.length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  const isFirst = state.currentDayIndex === 0;
+
+  const tasksHtml = day.tasks.map((t, ti) => `
+    <div class="task-card${t.done ? ' done' : ''}">
+      <div class="task-top">
+        <div class="check-wrap${t.done ? ' checked' : ''}" onclick="toggleTask(${ti})">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="task-body">
+          <div class="task-name">${t.title}</div>
+          ${t.note ? `<div class="task-hint">${t.note}</div>` : ''}
+        </div>
+      </div>
+      <div class="photo-section">
+        <div class="photo-row">
+          ${t.photos.map(p => `<img class="photo-thumb" src="${p}">`).join('')}
+          <label class="photo-add">
+            <span style="font-size:20px;line-height:1">+</span>
+            <span>foto</span>
+            <input type="file" accept="image/*" onchange="addPhoto(${ti}, this)">
+          </label>
+        </div>
+      </div>
+    </div>`).join('');
+
+  const messagesHtml = state.messages.map(m =>
+    `<div class="msg-bubble msg-${m.type}">${m.text}</div>`
+  ).join('');
+
+  document.getElementById('view-arthur').innerHTML = `
+    <div class="greeting">
+      <div class="greeting-name">Hoi Arthur!</div>
+      <div class="greeting-sub">Kleine stappen. Grote impact.</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">${getQuote()}</div>
+      <div class="quote-day">Quote van vandaag</div>
+    </div>
+    <div class="day-nav-row">
+      <div class="day-title-block">
+        <div class="day-main">${day.title}</div>
+        <div class="day-sub">${day.date} &nbsp;<span class="tag ${isFirst ? 'tag-today' : 'tag-other'}">${isFirst ? 'Vandaag' : 'Andere dag'}</span></div>
+      </div>
+      <div class="nav-arrows">
+        <button class="nav-arrow" onclick="navDay(-1)" ${state.currentDayIndex === 0 ? 'disabled' : ''}>&#8592;</button>
+        <button class="nav-arrow" onclick="navDay(1)" ${state.currentDayIndex === state.days.length - 1 ? 'disabled' : ''}>&#8594;</button>
+      </div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-top"><span>${done} van ${total} taken klaar</span><span>${pct}%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="task-list">${tasksHtml}</div>
+    ${state.showAddTask ? `
+    <div class="form-card">
+      <div class="form-label">Taak toevoegen</div>
+      <input class="form-input" type="text" id="new-task-title" placeholder="Wat moet er gedaan worden?" />
+      <input class="form-input" type="text" id="new-task-note" placeholder="Toelichting (optioneel)" />
+      <div class="form-row">
+        <button class="btn-primary" onclick="saveNewTask()">Toevoegen</button>
+        <button class="btn-secondary" onclick="cancelTask()">Annuleren</button>
+      </div>
+    </div>` : `<button class="btn-add-task" onclick="showAddTaskFn()">+ Taak toevoegen</button>`}
+    <div class="messages-section">
+      <div class="section-title">Berichten van Dwayne</div>
+      <div class="msg-list">${messagesHtml}</div>
+    </div>
+  `;
+}
+window.renderArthur = renderArthur;
+
+function renderDwayne() {
+  const totalTasks = state.days.reduce((a, d) => a + d.tasks.length, 0);
+  const doneTasks = state.days.reduce((a, d) => a + d.tasks.filter(t => t.done).length, 0);
+  const pct = totalTasks ? Math.round(doneTasks / totalTasks * 100) : 0;
+
+  const overviewHtml = state.days.map((d, i) => {
+    const done = d.tasks.filter(t => t.done).length;
+    const total = d.tasks.length;
+    const p = total ? Math.round(done / total * 100) : 0;
+    return `<div class="ov-card${i === state.currentDayIndex ? ' active-day' : ''}" onclick="jumpToDay(${i})">
+      <div class="ov-date">${d.date}</div>
+      <div class="ov-title">${d.title}</div>
+      <div class="ov-bar"><div class="ov-fill" style="width:${p}%"></div></div>
+      <div class="ov-count">${done}/${total} klaar</div>
+    </div>`;
+  }).join('');
+
+  const messagesHtml = state.messages.map(m =>
+    `<div class="msg-bubble msg-${m.type}">${m.text}</div>`
+  ).join('');
+
+  document.getElementById('view-dwayne').innerHTML = `
+    <div class="greeting">
+      <div class="greeting-name">Coach Dwayne</div>
+      <div class="greeting-sub">Hier zie jij hoe Arthur er voor staat.</div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">${doneTasks}</div><div class="stat-lbl">Klaar</div></div>
+      <div class="stat-card"><div class="stat-num">${totalTasks}</div><div class="stat-lbl">Totaal</div></div>
+      <div class="stat-card"><div class="stat-num">${pct}%</div><div class="stat-lbl">Voortgang</div></div>
+    </div>
+    <div class="section-title">Dagplanning Arthur</div>
+    <div class="overview-grid">${overviewHtml}</div>
+    ${state.showAddDay ? `
+    <div class="form-card">
+      <div class="form-label">Nieuwe dag toevoegen</div>
+      <input class="form-input" type="text" id="new-day-title" placeholder="Onderwerp (bv. Badkamer: tegels)" />
+      <input class="form-input" type="text" id="new-day-date" placeholder="Datum (bv. Ma 31 mrt)" />
+      <input class="form-input" type="text" id="new-day-t1" placeholder="Taak 1" />
+      <input class="form-input" type="text" id="new-day-t2" placeholder="Taak 2 (optioneel)" />
+      <input class="form-input" type="text" id="new-day-t3" placeholder="Taak 3 (optioneel)" />
+      <div class="form-row">
+        <button class="btn-primary" onclick="saveNewDay()">Dag toevoegen</button>
+        <button class="btn-secondary" onclick="cancelDay()">Annuleren</button>
+      </div>
+    </div>` : `<button class="btn-add-day" onclick="showAddDayFn()">+ Dag toevoegen aan Arthur's planning</button>`}
+    <div class="messages-section">
+      <div class="section-title">Stuur een bericht aan Arthur</div>
+      <div class="msg-list">${messagesHtml}</div>
+      <div class="msg-input-row">
+        <input class="msg-input" type="text" id="coach-input" placeholder="Schrijf een motivatiebericht..." onkeydown="if(event.key==='Enter')sendMsg()" />
+        <button class="btn-send" onclick="sendMsg()">Stuur</button>
+      </div>
+    </div>
+  `;
+}
+
+window.toggleTask = function(ti) {
+  state.days[state.currentDayIndex].tasks[ti].done = !state.days[state.currentDayIndex].tasks[ti].done;
+  saveToFirestore();
+};
+
+window.addPhoto = function(ti, input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    state.days[state.currentDayIndex].tasks[ti].photos.push(e.target.result);
+    saveToFirestore();
+  };
+  reader.readAsDataURL(file);
+};
+
+window.navDay = function(d) {
+  state.currentDayIndex = Math.max(0, Math.min(state.days.length - 1, state.currentDayIndex + d));
+  renderArthur();
+};
+
+window.jumpToDay = function(i) {
+  state.currentDayIndex = i;
+  setRole('arthur');
+};
+
+window.showAddTaskFn = function() { state.showAddTask = true; renderArthur(); };
+window.cancelTask = function() { state.showAddTask = false; renderArthur(); };
+window.saveNewTask = function() {
+  const title = document.getElementById('new-task-title').value.trim();
+  if (!title) return;
+  const note = document.getElementById('new-task-note').value.trim();
+  state.days[state.currentDayIndex].tasks.push({ id: 't' + Date.now(), title, note, done: false, photos: [] });
+  state.showAddTask = false;
+  saveToFirestore();
+};
+
+window.showAddDayFn = function() { state.showAddDay = true; renderDwayne(); };
+window.cancelDay = function() { state.showAddDay = false; renderDwayne(); };
+window.saveNewDay = function() {
+  const title = document.getElementById('new-day-title').value.trim(); if (!title) return;
+  const date = document.getElementById('new-day-date').value.trim();
+  const tasks = [];
+  ['new-day-t1','new-day-t2','new-day-t3'].forEach(id => {
+    const v = document.getElementById(id).value.trim();
+    if (v) tasks.push({ id: 't' + Date.now() + Math.random(), title: v, note: '', done: false, photos: [] });
+  });
+  if (!tasks.length) tasks.push({ id: 't' + Date.now(), title: 'Werkzaamheden invullen', note: '', done: false, photos: [] });
+  state.days.push({
+    id: 'dag' + Date.now(),
+    label: `Dag ${state.days.length + 1}`,
+    date: date || 'Datum volgt',
+    title, tasks
+  });
+  state.showAddDay = false;
+  saveToFirestore();
+};
+
+window.sendMsg = function() {
+  const input = document.getElementById('coach-input');
+  const txt = input.value.trim(); if (!txt) return;
+  state.messages.push({ type: 'coach', text: txt });
+  input.value = '';
+  saveToFirestore();
+};
+
+initData().then(() => {
+  listenToFirestore();
+});
+</script>
+</body>
+</html>
